@@ -2,6 +2,7 @@ const express = require("express");
 const debug = require("debug")("robots:server");
 const chalk = require("chalk");
 const morgan = require("morgan");
+const { notFoundErrorHandler, generalErrorHandler } = require("./errors");
 
 const app = express();
 
@@ -19,5 +20,8 @@ const initializeServer = (port) => {
 };
 
 app.use(morgan("dev"));
+
+app.use(notFoundErrorHandler);
+app.use(generalErrorHandler);
 
 module.exports = initializeServer;
