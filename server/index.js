@@ -1,6 +1,7 @@
 const express = require("express");
 const debug = require("debug")("robots:server");
 const chalk = require("chalk");
+const morgan = require("morgan");
 
 const app = express();
 
@@ -16,5 +17,7 @@ const initializeServer = (port) => {
     }
   });
 };
+
+app.use(morgan("dev"));
 
 module.exports = initializeServer;
