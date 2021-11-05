@@ -16,3 +16,5 @@ const initializeServer = (port) => {
     }
   });
 };
+
+module.exports = initializeServer;
