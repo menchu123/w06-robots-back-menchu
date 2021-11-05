@@ -3,13 +3,13 @@ const chalk = require("chalk");
 
 const notFoundErrorHandler = (req, res) => {
   debug(chalk.red("Not found (404)"));
-  res.status(404).json({ error: "Endopoint not found (404)" });
+  res.status(404).json({ error: "Endopoint not found (404) （┬┬＿┬┬）" });
 };
 
 // eslint-disable-next-line no-unused-vars
 const generalErrorHandler = (error, req, res, next) => {
   debug(chalk.red(`Error: ${error.message}`));
-  const message = error.code ? error.message : "General error";
+  const message = error.code ? error.message : "General error ಥ,_｣ಥ";
   res.status(error.code || 500).json({ error: message });
 };
 
