@@ -2,6 +2,7 @@ const debug = require("debug")("robots:errors");
 const chalk = require("chalk");
 
 const notFoundErrorHandler = (req, res) => {
+  debug(chalk.red("Not found (404)"));
   res.status(404).json({ error: "Endopoint not found (404)" });
 };
 
