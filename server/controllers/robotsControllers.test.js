@@ -1,5 +1,5 @@
 const Robot = require("../../database/models/robots");
-const { getRobots, getRobotById } = require("./robotsControllers");
+const { getRobots, getRobotById, createRobot } = require("./robotsControllers");
 
 jest.mock("../../database/models/robots");
 
@@ -81,6 +81,49 @@ describe("Given a getRobotById function", () => {
       const next = jest.fn();
 
       await getRobotById(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a createRobot function", () => {
+  describe("When it receives an object res and an object req with a body", () => {
+    test("Then it should invoke the method json of res and call the Robot.create function", async () => {
+      const robot = {
+        id: 1,
+        name: "Arturito",
+      };
+
+      const req = {
+        body: robot,
+      };
+
+      Robot.create = jest.fn().mockResolvedValue(robot);
+      const res = {
+        json: jest.fn(),
+      };
+      const next = () => {};
+
+      await createRobot(req, res, next);
+
+      expect(Robot.find).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalledWith(robot);
+    });
+  });
+
+  describe("When it receives an object res and an invalid object req", () => {
+    test("Then it should invoke next with an error", async () => {
+      const req = {};
+      const error = {};
+
+      Robot.create = jest.fn().mockRejectedValue(error);
+      const res = {
+        json: jest.fn(),
+      };
+      const next = jest.fn();
+
+      await createRobot(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });
