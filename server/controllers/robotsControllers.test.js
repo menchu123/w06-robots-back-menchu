@@ -48,4 +48,41 @@ describe("Given a getRobotById function", () => {
       expect(Robot.findById).toHaveBeenCalledWith(idRobot);
     });
   });
+  describe("And Robot.findById rejects", () => {
+    test("Then it should call next with an error", async () => {
+      const error = {};
+      Robot.findById = jest.fn().mockRejectedValue(error);
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await getRobotById(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(error).toHaveProperty("code");
+      expect(error.code).toBe(400);
+    });
+  });
+
+  describe("And Robot.findById rejects f", () => {
+    test("Then it should call next with an error", async () => {
+      const error = new Error("Robot not found");
+      Robot.findById = jest.fn().mockResolvedValue(undefined);
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await getRobotById(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
 });
