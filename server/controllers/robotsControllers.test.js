@@ -68,7 +68,7 @@ describe("Given a getRobotById function", () => {
     });
   });
 
-  describe("And Robot.findById rejects f", () => {
+  describe("And Robot.findById returns undefined", () => {
     test("Then it should call next with an error", async () => {
       const error = new Error("Robot not found");
       Robot.findById = jest.fn().mockResolvedValue(undefined);
