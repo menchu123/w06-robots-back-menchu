@@ -1,5 +1,5 @@
+const debug = require("debug")("robots:controller");
 const chalk = require("chalk");
-const debug = require("debug");
 const Robot = require("../../database/models/robots");
 
 const getRobots = async (req, res) => {
@@ -12,7 +12,6 @@ const getRobotById = async (req, res, next) => {
   const { idRobot } = req.params;
   try {
     const searchedRobot = await Robot.findById(idRobot);
-    debugger;
     if (searchedRobot) {
       res.json(searchedRobot);
     } else {
@@ -27,4 +26,17 @@ const getRobotById = async (req, res, next) => {
   }
 };
 
-module.exports = { getRobots, getRobotById };
+const createRobot = async (req, res, next) => {
+  try {
+    debug(chalk.cyanBright("Posting"));
+    const newRobot = await Robot.create(req.body);
+    res.json(newRobot);
+  } catch (error) {
+    debug(chalk.red("Post failed"));
+    error.message = "Post failed";
+    error.code = 400;
+    next(error);
+  }
+};
+
+module.exports = { getRobots, getRobotById, createRobot };
