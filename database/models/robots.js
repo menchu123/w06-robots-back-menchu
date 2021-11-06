@@ -11,7 +11,7 @@ const robotSchema = new Schema({
   características: {
     velocidad: { type: Number, min: 0, max: 10 },
     resistencia: { type: Number, min: 0, max: 10 },
-    creación: { type: Date, default: Date.now },
+    creación: { type: String },
   },
 });
 
