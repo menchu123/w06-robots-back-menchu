@@ -15,6 +15,6 @@ router.get("/:idRobot", getRobotById);
 
 router.post("/create", isAuthorized, createRobot);
 
-router.post("/delete/:idRobot", isAuthorized, deleteRobot);
+router.delete("/delete/:idRobot", isAuthorized, deleteRobot);
 
 module.exports = router;
