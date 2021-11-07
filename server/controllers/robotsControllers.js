@@ -57,6 +57,22 @@ const deleteRobot = async (req, res, next) => {
   }
 };
 
+const updateRobot = async (req, res, next) => {
+  try {
+    debug(chalk.cyanBright("Putting"));
+    const { _id } = req.body;
+    const newRobot = await Robot.findByIdAndUpdate(_id, req.body, {
+      new: true,
+    });
+    res.json(newRobot);
+  } catch (error) {
+    debug(chalk.red("PUT failed"));
+    error.message = "PUT failed";
+    error.code = 400;
+    next(error);
+  }
+};
+
 const isAuthorized = (req, res, next) => {
   const { token } = req.query;
   if (token === process.env.TOKEN) {
@@ -72,5 +88,6 @@ module.exports = {
   getRobotById,
   createRobot,
   deleteRobot,
+  updateRobot,
   isAuthorized,
 };
