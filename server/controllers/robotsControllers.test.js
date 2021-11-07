@@ -1,7 +1,19 @@
 const Robot = require("../../database/models/robots");
-const { getRobots, getRobotById, createRobot } = require("./robotsControllers");
+const {
+  getRobots,
+  getRobotById,
+  createRobot,
+  isAuthorized,
+} = require("./robotsControllers");
 
 jest.mock("../../database/models/robots");
+
+const mockResponse = () => {
+  const res = {};
+  res.status = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  return res;
+};
 
 describe("Given a getRobots function", () => {
   describe("When it receives an object res", () => {
@@ -127,6 +139,45 @@ describe("Given a createRobot function", () => {
       await createRobot(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a isAuthorized function", () => {
+  describe("When it receives an object req with a correct token", () => {
+    test("Then it should invoke the function next", async () => {
+      const req = {
+        query: {
+          token: process.env.TOKEN,
+        },
+      };
+
+      const res = {};
+
+      const next = jest.fn();
+
+      await isAuthorized(req, res, next);
+
+      expect(next).toHaveBeenCalled();
+    });
+  });
+
+  describe("When it receives an object req with an incorrect token", () => {
+    test("Then it should respond with an error", async () => {
+      const req = {
+        query: {
+          token: "BAD TOKEN",
+        },
+      };
+
+      const res = mockResponse();
+
+      const next = jest.fn();
+
+      await isAuthorized(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalled();
     });
   });
 });
