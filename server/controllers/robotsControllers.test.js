@@ -120,7 +120,7 @@ describe("Given a createRobot function", () => {
 
       await createRobot(req, res, next);
 
-      expect(Robot.find).toHaveBeenCalled();
+      expect(Robot.create).toHaveBeenCalled();
       expect(res.json).toHaveBeenCalledWith(robot);
     });
   });
