@@ -4,6 +4,7 @@ const {
   getRobotById,
   createRobot,
   isAuthorized,
+  deleteRobot,
 } = require("./robotsControllers");
 
 jest.mock("../../database/models/robots");
@@ -178,6 +179,65 @@ describe("Given a isAuthorized function", () => {
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(res.json).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given a deleteRobot function", () => {
+  describe("When it receives a request with an id 1, a response and a next function", () => {
+    test("Then it should call the Robot.findByIdAndDelete with a 1", async () => {
+      const idRobot = 1;
+      const req = {
+        params: {
+          idRobot,
+        },
+      };
+      const res = {
+        json: () => {},
+      };
+      const next = () => {};
+      Robot.findByIdAndDelete = jest.fn().mockResolvedValue({});
+
+      await deleteRobot(req, res, next);
+      expect(Robot.findByIdAndDelete).toHaveBeenCalledWith(idRobot);
+    });
+  });
+
+  describe("And Robot.findByIdAndDelete rejects", () => {
+    test("Then it should call next with an error", async () => {
+      const error = {};
+      Robot.findByIdAndDelete = jest.fn().mockRejectedValue(error);
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await deleteRobot(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(error).toHaveProperty("code");
+      expect(error.code).toBe(400);
+    });
+  });
+
+  describe("And Robot.findByIdAndDelete returns undefined", () => {
+    test("Then it should call next with an error", async () => {
+      const error = new Error("Robot not found");
+      Robot.findByIdAndDelete = jest.fn().mockResolvedValue(undefined);
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await deleteRobot(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 });
