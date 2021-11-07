@@ -39,6 +39,24 @@ const createRobot = async (req, res, next) => {
   }
 };
 
+const deleteRobot = async (req, res, next) => {
+  const { idRobot } = req.params;
+  try {
+    const searchedRobot = await Robot.findByIdAndDelete(idRobot);
+    if (searchedRobot) {
+      res.json("Ciao Peix!");
+    } else {
+      const error = new Error("Robot not found");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.code = 400;
+    error.message = "Bad Request!";
+    next(error);
+  }
+};
+
 const isAuthorized = (req, res, next) => {
   const { token } = req.query;
   if (token === process.env.TOKEN) {
@@ -49,4 +67,10 @@ const isAuthorized = (req, res, next) => {
   }
 };
 
-module.exports = { getRobots, getRobotById, createRobot, isAuthorized };
+module.exports = {
+  getRobots,
+  getRobotById,
+  createRobot,
+  deleteRobot,
+  isAuthorized,
+};
