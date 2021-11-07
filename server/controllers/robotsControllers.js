@@ -39,4 +39,14 @@ const createRobot = async (req, res, next) => {
   }
 };
 
-module.exports = { getRobots, getRobotById, createRobot };
+const isAuthorized = (req, res, next) => {
+  const { token } = req.query;
+  if (token === process.env.TOKEN) {
+    next();
+  } else {
+    debug(chalk.red("Unauthorised"));
+    res.status(401).json({ error: "Unauthorised" });
+  }
+};
+
+module.exports = { getRobots, getRobotById, createRobot, isAuthorized };

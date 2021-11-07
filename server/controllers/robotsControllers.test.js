@@ -118,6 +118,7 @@ describe("Given a createRobot function", () => {
       const error = {};
 
       Robot.create = jest.fn().mockRejectedValue(error);
+
       const res = {
         json: jest.fn(),
       };
