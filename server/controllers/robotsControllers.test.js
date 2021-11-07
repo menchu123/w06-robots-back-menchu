@@ -5,6 +5,7 @@ const {
   createRobot,
   isAuthorized,
   deleteRobot,
+  updateRobot,
 } = require("./robotsControllers");
 
 jest.mock("../../database/models/robots");
@@ -238,6 +239,47 @@ describe("Given a deleteRobot function", () => {
       await deleteRobot(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given an updateRobot function", () => {
+  describe("When it receives an object res and an object req with a body", () => {
+    test("Then it should invoke the method json of res and call the Robot.findByIdAndCreate function", async () => {
+      const req = {
+        body: {
+          _id: 4,
+        },
+      };
+
+      Robot.findByIdAndUpdate = jest.fn();
+      const res = {
+        json: jest.fn(),
+      };
+      const next = () => {};
+
+      await updateRobot(req, res, next);
+
+      expect(Robot.findByIdAndUpdate).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalled();
+    });
+  });
+
+  describe("When it receives an object res and an invalid object req", () => {
+    test("Then it should invoke next with an error", async () => {
+      const req = {};
+      const error = {};
+
+      Robot.findByIdAndUpdate = jest.fn().mockRejectedValue(error);
+
+      const res = {
+        json: jest.fn(),
+      };
+      const next = jest.fn();
+
+      await updateRobot(req, res, next);
+
+      expect(next).toHaveBeenCalled();
     });
   });
 });
