@@ -3,7 +3,7 @@ const chalk = require("chalk");
 const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
-  const authHeader = req.headers("Authorization");
+  const authHeader = req.header("Authorization");
   if (!authHeader) {
     debug(chalk.redBright("Lo siento pero es que no sé quién eres"));
     const error = new Error("Lo siento pero es que no sé quién eres");
