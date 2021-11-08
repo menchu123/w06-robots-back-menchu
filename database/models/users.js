@@ -15,6 +15,6 @@ const userSchema = new Schema({
   },
 });
 
-const User = model("Robot", userSchema, "Users");
+const User = model("User", userSchema, "Users");
 
 module.exports = User;
