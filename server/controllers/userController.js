@@ -13,7 +13,7 @@ const userLogin = async (req, res, next) => {
     error.code = 401;
     next(error);
   } else {
-    const rightPassword = bcrypt.compare(password, user.password);
+    const rightPassword = await bcrypt.compare(password, user.password);
     if (!rightPassword) {
       debug(chalk.redBright("Eeeeeek Wrong password"));
       const error = new Error("Eeeeeek Wrong password");

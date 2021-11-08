@@ -1,23 +1,23 @@
 const express = require("express");
+const auth = require("../middlewares/userMiddlewares/auth");
 const {
   getRobots,
   getRobotById,
   createRobot,
-  isAuthorized,
   deleteRobot,
   updateRobot,
 } = require("../controllers/robotsControllers");
 
 const router = express.Router();
 
-router.get("/", getRobots);
+router.get("/", auth, getRobots);
 
-router.get("/:idRobot", getRobotById);
+router.get("/:idRobot", auth, getRobotById);
 
-router.post("/create", isAuthorized, createRobot);
+router.post("/create", auth, createRobot);
 
-router.delete("/delete/:idRobot", isAuthorized, deleteRobot);
+router.delete("/delete/:idRobot", auth, deleteRobot);
 
-router.put("/update", isAuthorized, updateRobot);
+router.put("/update", auth, updateRobot);
 
 module.exports = router;
