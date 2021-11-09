@@ -134,4 +134,46 @@ describe("Given a /robots router,", () => {
       expect(body).toEqual(expectedError);
     });
   });
+
+  describe("When it gets a POST request for /robots/create with a new robot object", () => {
+    test("Then it should respond with a the new robot and a 200 status code", async () => {
+      const { body } = await request
+        .post("/robots/create")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          nombre: "María RobotAñadido",
+          imagen: "añadido.jpg",
+          características: {
+            velocidad: 1,
+            resistencia: 1,
+            creación: "2001",
+          },
+        })
+        .expect(200);
+
+      expect(body).toHaveProperty("nombre", "María RobotAñadido");
+    });
+  });
+
+  describe("When it gets a POST request for /robots/create with a new robot object that is not well formatted", () => {
+    test("Then it should respond with a 'Post failed' error", async () => {
+      const { body } = await request
+        .post("/robots/create")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          name: "María RobotAñadido",
+          imagen: "añadido.jpg",
+          velocidad: 1,
+          resistencia: 1,
+          creación: "2001",
+        })
+        .expect(400);
+
+      const expectedError = {
+        error: "Post failed",
+      };
+
+      expect(body).toEqual(expectedError);
+    });
+  });
 });
