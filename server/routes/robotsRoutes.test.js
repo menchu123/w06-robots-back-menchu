@@ -215,4 +215,26 @@ describe("Given a /robots router,", () => {
       expect(body).toEqual(expectedError);
     });
   });
+
+  describe("When it gets a PUT request for /robots/update with an edited object with an existing id", () => {
+    test("Then it should send a response with the updated robot a status code of 200", async () => {
+      const { body } = await request
+        .put("/robots/update")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          _id: "618abb613c10e9728eef559a",
+          __v: 0,
+          nombre: "María Robotito Updated",
+          imagen: "ejemplito.jpg",
+          características: {
+            velocidad: 9,
+            resistencia: 1,
+            creación: "3080",
+          },
+        })
+        .expect(200);
+
+      expect(body).toHaveProperty("nombre", "María Robotito Updated");
+    });
+  });
 });
