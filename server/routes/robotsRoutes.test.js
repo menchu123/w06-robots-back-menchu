@@ -5,6 +5,7 @@ const { response } = require("express");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const initializeDB = require("../../database");
+const Robot = require("../../database/models/robots");
 const { initializeServer } = require("../index");
 const { app } = require("../index");
 
@@ -24,6 +25,25 @@ beforeEach(async () => {
     .send({ username: "maribot", password: "juanymedio11" })
     .expect(200);
   token = loginResponse.body.token;
+  await Robot.deleteMany();
+  await Robot.create({
+    nombre: "María Robotito",
+    imagen: "ejemplito.jpg",
+    características: {
+      velocidad: "10",
+      resistencia: "1",
+      creación: "3080",
+    },
+  });
+  await Robot.create({
+    nombre: "María Robotazo",
+    imagen: "ejemplazo.jpg",
+    características: {
+      velocidad: "1",
+      resistencia: "10",
+      creación: "0080",
+    },
+  });
 });
 
 afterAll(async () => {
@@ -40,10 +60,12 @@ afterAll(async () => {
 describe("Given a /robots router,", () => {
   describe("When it gets a GET request for /robots", () => {
     test("Then it should send a response with an array of robots and a status code of 200", async () => {
-      await request
+      const { body } = await request
         .get("/robots")
         .set("Authorization", `Bearer ${token}`)
         .expect(200);
+
+      console.log(body);
     });
   });
 });
