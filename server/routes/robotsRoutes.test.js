@@ -176,4 +176,27 @@ describe("Given a /robots router,", () => {
       expect(body).toEqual(expectedError);
     });
   });
+
+  describe("When it gets a DELETE request for /robots/delete/:id with an existing id", () => {
+    test("Then it should send a response with the id of the corresponding robot a status code of 200", async () => {
+      const { body } = await request
+        .delete("/robots/delete/618abb613c10e9728eef559a")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
+
+      const expectedRobot = {
+        _id: "618abb613c10e9728eef559a",
+        __v: 0,
+        nombre: "María Robotito",
+        imagen: "ejemplito.jpg",
+        características: {
+          velocidad: 10,
+          resistencia: 1,
+          creación: "3080",
+        },
+      };
+
+      expect(body).not.toContain(expectedRobot);
+    });
+  });
 });
