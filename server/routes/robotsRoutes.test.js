@@ -176,4 +176,43 @@ describe("Given a /robots router,", () => {
       expect(body).toEqual(expectedError);
     });
   });
+
+  describe("When it gets a DELETE request for /robots/delete/:id with an existing id", () => {
+    test("Then it should send a response with the id of the corresponding robot a status code of 200", async () => {
+      const { body } = await request
+        .delete("/robots/delete/618abb613c10e9728eef559a")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
+
+      const deletedRobot = {
+        _id: "618abb613c10e9728eef559a",
+        __v: 0,
+        nombre: "María Robotito",
+        imagen: "ejemplito.jpg",
+        características: {
+          velocidad: 10,
+          resistencia: 1,
+          creación: "3080",
+        },
+      };
+
+      // eslint-disable-next-line no-underscore-dangle
+      expect(body).toEqual({ id: deletedRobot._id });
+    });
+  });
+
+  describe("When it gets a DELETE request for /robots/delete/:id with an unknown id", () => {
+    test("Then it should send a response with the id of the corresponding robot a status code of 404", async () => {
+      const { body } = await request
+        .delete("/robots/delete/61855f4ba99aeba4d99148f7")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(404);
+
+      const expectedError = {
+        error: "Robot not found",
+      };
+
+      expect(body).toEqual(expectedError);
+    });
+  });
 });
