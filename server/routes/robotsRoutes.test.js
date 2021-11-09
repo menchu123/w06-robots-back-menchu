@@ -119,4 +119,19 @@ describe("Given a /robots router,", () => {
       expect(body).toEqual(expectedRobot);
     });
   });
+
+  describe("When it gets a GET request for /robots/:id with an unknown id", () => {
+    test("Then it should respond with a 'Robot not found' error", async () => {
+      const { body } = await request
+        .get("/robots/618abb613c10e9728eef559g")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(404);
+
+      const expectedError = {
+        error: "Robot not found",
+      };
+
+      expect(body).toEqual(expectedError);
+    });
+  });
 });
