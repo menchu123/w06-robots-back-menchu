@@ -184,7 +184,7 @@ describe("Given a /robots router,", () => {
         .set("Authorization", `Bearer ${token}`)
         .expect(200);
 
-      const expectedRobot = {
+      const deletedRobot = {
         _id: "618abb613c10e9728eef559a",
         __v: 0,
         nombre: "María Robotito",
@@ -196,7 +196,8 @@ describe("Given a /robots router,", () => {
         },
       };
 
-      expect(body).not.toContain(expectedRobot);
+      // eslint-disable-next-line no-underscore-dangle
+      expect(body).toEqual({ id: deletedRobot._id });
     });
   });
 
