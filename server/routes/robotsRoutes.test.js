@@ -1,7 +1,6 @@
 require("dotenv").config();
 const debug = require("debug")("robots:routes:tests");
 const chalk = require("chalk");
-const { response } = require("express");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const initializeDB = require("../../database");
@@ -27,20 +26,24 @@ beforeEach(async () => {
   token = loginResponse.body.token;
   await Robot.deleteMany();
   await Robot.create({
+    _id: "618abb613c10e9728eef559a",
+    __v: 0,
     nombre: "María Robotito",
     imagen: "ejemplito.jpg",
     características: {
-      velocidad: "10",
-      resistencia: "1",
+      velocidad: 10,
+      resistencia: 1,
       creación: "3080",
     },
   });
   await Robot.create({
+    _id: "618abb613c10e9728eef559c",
+    __v: 0,
     nombre: "María Robotazo",
     imagen: "ejemplazo.jpg",
     características: {
-      velocidad: "1",
-      resistencia: "10",
+      velocidad: 1,
+      resistencia: 10,
       creación: "0080",
     },
   });
@@ -65,7 +68,32 @@ describe("Given a /robots router,", () => {
         .set("Authorization", `Bearer ${token}`)
         .expect(200);
 
-      console.log(body);
+      const expectedLength = 2;
+      const expectedRobot1 = {
+        _id: "618abb613c10e9728eef559a",
+        __v: 0,
+        nombre: "María Robotito",
+        imagen: "ejemplito.jpg",
+        características: {
+          velocidad: 10,
+          resistencia: 1,
+          creación: "3080",
+        },
+      };
+      const expectedRobot2 = {
+        _id: "618abb613c10e9728eef559c",
+        __v: 0,
+        nombre: "María Robotazo",
+        imagen: "ejemplazo.jpg",
+        características: {
+          velocidad: 1,
+          resistencia: 10,
+          creación: "0080",
+        },
+      };
+      expect(body).toHaveLength(expectedLength);
+      expect(body).toContainEqual(expectedRobot1);
+      expect(body).toContainEqual(expectedRobot2);
     });
   });
 });
