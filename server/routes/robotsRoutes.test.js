@@ -96,4 +96,27 @@ describe("Given a /robots router,", () => {
       expect(body).toContainEqual(expectedRobot2);
     });
   });
+
+  describe("When it gets a GET request for /robots/:id with an existing id", () => {
+    test("Then it should send a response the corresponding robot a status code of 200", async () => {
+      const { body } = await request
+        .get("/robots/618abb613c10e9728eef559a")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
+
+      const expectedRobot = {
+        _id: "618abb613c10e9728eef559a",
+        __v: 0,
+        nombre: "María Robotito",
+        imagen: "ejemplito.jpg",
+        características: {
+          velocidad: 10,
+          resistencia: 1,
+          creación: "3080",
+        },
+      };
+
+      expect(body).toEqual(expectedRobot);
+    });
+  });
 });
