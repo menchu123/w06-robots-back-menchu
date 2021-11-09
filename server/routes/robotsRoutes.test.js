@@ -4,7 +4,8 @@ const chalk = require("chalk");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const initializeDB = require("../../database");
-const app = require("../index");
+const { initializeServer } = require("../index");
+const { app } = require("../index");
 
 const request = supertest(app);
 
@@ -12,7 +13,7 @@ let server;
 
 beforeAll(async () => {
   await initializeDB(process.env.MONGODB_STRING_TEST);
-  server = await app.initializeServer(process.env.SERVER_PORT_TEST);
+  server = await initializeServer(process.env.SERVER_PORT_TEST);
 });
 
 afterAll(async () => {
@@ -26,8 +27,10 @@ afterAll(async () => {
   await server.close();
 });
 
-describe("", () => {
-  describe("", () => {
-    test("", () => {});
+describe("Given a /robots router,", () => {
+  describe("When it gets a GET request for /robots", () => {
+    test("Then it should send a response with an array of robots and a status code of 200", async () => {
+      await request.get("/robots").expect(200);
+    });
   });
 });
