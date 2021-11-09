@@ -12,18 +12,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const initializeServer = (port) => {
-  const server = app.listen(port, () => {
-    debug(chalk.green(`¡Escuchanddo en ${port}! ʕ•ᴥ•ʔﾉ♡`));
-  });
+const initializeServer = (port) =>
+  new Promise((resolve) => {
+    const server = app.listen(port, () => {
+      debug(chalk.green(`¡Escuchanddo en ${port}! ʕ•ᴥ•ʔﾉ♡`));
+    });
 
-  server.on("error", (error) => {
-    debug(chalk.red("No se ha podido iniciar el servidor :("));
-    if (error.code === "EADDRINUSE") {
-      debug(chalk.red(`${port} está en uso...  ʕʘ̅┏ل͜┓ʘ̅ʔ`));
-    }
+    server.on("error", (error) => {
+      debug(chalk.red("No se ha podido iniciar el servidor :("));
+      if (error.code === "EADDRINUSE") {
+        debug(chalk.red(`${port} está en uso...  ʕʘ̅┏ل͜┓ʘ̅ʔ`));
+      }
+    });
+    resolve(server);
   });
-};
 
 app.use(morgan("dev"));
 
@@ -33,4 +35,4 @@ app.use("/robots", robotsRoutes);
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
 
-module.exports = initializeServer;
+module.exports = { initializeServer, app };
