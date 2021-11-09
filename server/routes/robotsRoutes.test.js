@@ -237,4 +237,16 @@ describe("Given a /robots router,", () => {
       expect(body).toHaveProperty("nombre", "María Robotito Updated");
     });
   });
+
+  describe("When it gets a request for an unknown route", () => {
+    test("Then it should return an error with a message 'Endopoint not found (404) （┬┬＿┬┬）' with a status code of 404", async () => {
+      const { body } = await request.put("/robots/noexisto").expect(404);
+
+      const expectedError = {
+        error: "Endopoint not found (404) （┬┬＿┬┬）",
+      };
+
+      expect(body).toEqual(expectedError);
+    });
+  });
 });
