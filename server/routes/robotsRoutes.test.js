@@ -202,7 +202,7 @@ describe("Given a /robots router,", () => {
   });
 
   describe("When it gets a DELETE request for /robots/delete/:id with an unknown id", () => {
-    test("Then it should send a response with the id of the corresponding robot a status code of 404", async () => {
+    test("Then it should send a response with a 'Robot not found' error and a status code of 404", async () => {
       const { body } = await request
         .delete("/robots/delete/61855f4ba99aeba4d99148f7")
         .set("Authorization", `Bearer ${token}`)
@@ -235,6 +235,32 @@ describe("Given a /robots router,", () => {
         .expect(200);
 
       expect(body).toHaveProperty("nombre", "María Robotito Updated");
+    });
+  });
+
+  describe("When it gets a PUT request for /robots/update with an edited object without an id", () => {
+    test("Then it should send a response with a 'PUT failed' error and a status code of 400", async () => {
+      const { body } = await request
+        .put("/robots/update")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          _id: "not an id",
+          __v: 0,
+          nombre: "María Robotito Updated",
+          imagen: "ejemplito.jpg",
+          características: {
+            velocidad: 9,
+            resistencia: 1,
+            creación: "3080",
+          },
+        })
+        .expect(400);
+
+      const expectedError = {
+        error: "PUT failed",
+      };
+
+      expect(body).toEqual(expectedError);
     });
   });
 
