@@ -16,14 +16,14 @@ let token;
 beforeAll(async () => {
   await initializeDB(process.env.MONGODB_STRING_TEST);
   server = await initializeServer(process.env.SERVER_PORT_TEST);
-});
-
-beforeEach(async () => {
   const loginResponse = await request
     .post("/users/login")
     .send({ username: "maribot", password: "juanymedio11" })
     .expect(200);
   token = loginResponse.body.token;
+});
+
+beforeEach(async () => {
   await Robot.deleteMany();
   await Robot.create({
     _id: "618abb613c10e9728eef559a",
