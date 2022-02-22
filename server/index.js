@@ -16,6 +16,7 @@ const initializeServer = (port) =>
   new Promise((resolve) => {
     const server = app.listen(port, () => {
       debug(chalk.green(`¡Escuchanddo en ${port}! ʕ•ᴥ•ʔﾉ♡`));
+      resolve(server);
     });
 
     server.on("error", (error) => {
@@ -24,7 +25,6 @@ const initializeServer = (port) =>
         debug(chalk.red(`${port} está en uso...  ʕʘ̅┏ل͜┓ʘ̅ʔ`));
       }
     });
-    resolve(server);
   });
 
 app.use(morgan("dev"));
