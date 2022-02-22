@@ -254,10 +254,10 @@ describe("Given a /robots router,", () => {
             creación: "3080",
           },
         })
-        .expect(400);
+        .expect(404);
 
       const expectedError = {
-        error: "PUT failed",
+        error: "Robot not found",
       };
 
       expect(body).toEqual(expectedError);

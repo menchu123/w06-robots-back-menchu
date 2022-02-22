@@ -22,7 +22,7 @@ const auth = (req, res, next) => {
         req.userId = user.id;
         next();
       } catch (error) {
-        error.message("El token está mal sorrynotsorry :/");
+        error.message = "El token está mal sorrynotsorry :/";
         error.code = 401;
         next(error);
       }

@@ -61,10 +61,18 @@ const updateRobot = async (req, res, next) => {
   try {
     debug(chalk.cyanBright("Putting"));
     const { _id } = req.body;
-    const newRobot = await Robot.findByIdAndUpdate(_id, req.body, {
-      new: true,
-    });
-    res.json(newRobot);
+    const findRobot = Robot.findById(_id);
+    if (findRobot === null) {
+      const newRobot = await Robot.findByIdAndUpdate(_id, req.body, {
+        new: true,
+      });
+      res.json(newRobot);
+    } else {
+      console.log(_id);
+      const error = new Error("Robot not found");
+      error.code = 404;
+      next(error);
+    }
   } catch (error) {
     debug(chalk.red("PUT failed"));
     error.message = "PUT failed";
